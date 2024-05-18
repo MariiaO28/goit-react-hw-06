@@ -1,10 +1,13 @@
-import { Formik, Form, Field, ErrorMessage } from "formik"
-import { useId } from "react"
-import { nanoid } from "nanoid"
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contactsSlice';
+import { useId } from "react";
 import * as Yup from "yup";
-import css from './ContactForm.module.css'
+import css from './ContactForm.module.css';
 
-export default function ContactForm({ onAdd }) {
+export default function ContactForm() {
+    
+    const dispatch = useDispatch();
     
     const nameFieldId = useId();
     const numberFieldId = useId();
@@ -15,13 +18,9 @@ export default function ContactForm({ onAdd }) {
         number: "",
     }
 
-    const handleSubmit = (values, actions) => {
+    const handleSubmit = (value, actions) => {
+        dispatch(addContact({ name:value.name, number:value.number }));
         actions.resetForm();
-        onAdd({
-            id: nanoid(),
-            name: values.name,
-            number: values.number,
-        })
     }
 
     const ContactSchema = Yup.object().shape({
